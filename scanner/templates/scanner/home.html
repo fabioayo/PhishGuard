@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=McLaren&display=swap');
+
+        body {
+            font-family: 'Playfair Display';
+            font-style: normal;
+            font-weight: 200;
+            background: #dcdcdc;
+            margin: 0px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+            text-align:center;
+        }
+    </style>
+
+    <title>Phishing Detector</title>
+</head>
+<body>
+<h2>AI Phishing Detector</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <textarea name="text" rows="10" cols="60" placeholder="Paste email or message here"></textarea>
+    <br>
+    <button type="submit">Scan</button>
+</form>
+
+{% if result %}
+    <h3>Prediction: {{ result }}</h3>
+{% endif %}
+
+</body>
+</html>
