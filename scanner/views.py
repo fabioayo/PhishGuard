@@ -8,6 +8,7 @@ def home(request):
     if request.method == "POST":
         text = request.POST.get("text")
         result = predict_email(text)
-        # print (result)
 
-    return render(request, "scanner/home.html", {"result": result}) 
+    return render(request, "scanner/home.html", {"result": result})
+
+# where the magic happens, the predict_email function is called with the input text and returns the prediction result. This result is then passed to the template for rendering.

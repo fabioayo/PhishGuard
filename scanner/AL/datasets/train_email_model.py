@@ -5,6 +5,8 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import joblib
 import pandas as pd
 
+#Train Email model
+
 # Load dataset
 df = pd.read_csv("Phishing_Email.csv")
 

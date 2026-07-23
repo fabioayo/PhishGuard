@@ -31,10 +31,17 @@
     <title>Phishing Detector</title>
 </head>
 <body>
+    <navbar>
+        
+    </navbar>
 <h2>AI Phishing Detector</h2>
 
 <form method="POST">
     {% csrf_token %}
+    <button type="submit" name="scan_type" value="url">EMAIL</button>
+    <button type="submit" name="scan_type" value="text">URL</button>
+    <button type="submit" name="scan_type" value="text">SMS</button>
+
     <textarea name="text" rows="10" cols="60" placeholder="Paste email or message here"></textarea>
     <br>
     <button type="submit">Scan</button>
