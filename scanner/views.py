@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .ml.models.predict import predict_email
 from .ml.services.threat_engine import ThreatEngine
+from .ml.services.rules import check_rules
 
 
 def home(request):
@@ -23,23 +24,8 @@ def home(request):
             )
 
         # Rule-Based Checks
-        if "urgent" in text.lower():
-            engine.add(
-                10,
-                "Urgency language detected."
-            )
-
-        if "password" in text.lower():
-            engine.add(
-                20,
-                "Sensitive credential request detected."
-            )
-
-        if "click here" in text.lower():
-            engine.add(
-                10,
-                "Suspicious call-to-action detected."
-            )
+        check_rules(text, engine)
+        
         result = engine.build_result(
             ml_prediction=prediction["result"],
             ml_confidence=prediction["confidence"]
