@@ -48,7 +48,23 @@
 </form>
 
 {% if result %}
-    <h3>Prediction: {{ result }}</h3>
+
+<h2>Prediction: {{ result.result }}</h2>
+
+<p><strong>Risk:</strong> {{ result.risk }}</p>
+
+<p><strong>Score:</strong> {{ result.score }}/100</p>
+
+<p><strong>Confidence:</strong> {{ result.confidence }}%</p>
+
+<h3>Reasons</h3>
+
+<ul>
+    {% for reason in result.reasons %}
+        <li>{{ reason }}</li>
+    {% endfor %}
+</ul>
+
 {% endif %}
 
 </body>
