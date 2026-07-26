@@ -4,6 +4,7 @@
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta httqp-equiv="refresh" content="20">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -14,10 +15,10 @@
         @import url('https://fonts.googleapis.com/css?family=McLaren&display=swap');
 
         body {
+            bgcolor: #f8f9fa;
             font-family: 'Playfair Display';
-            font-style: normal;
+            font-style: bold;
             font-weight: 200;
-            background: #dcdcdc;
             margin: 0px;
             display:flex;
             flex-direction:column;
@@ -31,18 +32,16 @@
     <title>Phishing Detector</title>
 </head>
 <body>
-    <navbar>
-        
-    </navbar>
-<h2>AI Phishing Detector</h2>
+
+<h2>AI Phishing Detector System</h2>
 
 <form method="POST">
     {% csrf_token %}
-    <button type="submit" name="scan_type" value="url">EMAIL</button>
+    {% comment %} <button type="submit" name="scan_type" value="url">EMAIL</button>
     <button type="submit" name="scan_type" value="text">URL</button>
-    <button type="submit" name="scan_type" value="text">SMS</button>
+    <button type="submit" name="scan_type" value="text">SMS</button> {% endcomment %}
 
-    <textarea name="text" rows="10" cols="60" placeholder="Paste email or message here"></textarea>
+    <textarea name="text" rows="10" cols="20" placeholder="Paste email or message here"></textarea>
     <br>
     <button type="submit">Scan</button>
 </form>
