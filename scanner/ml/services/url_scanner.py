@@ -1,4 +1,5 @@
 from urllib.parse import urlparse
+from .virustotal import VirusTotalScanner
 import re
 
 SHORTENERS = [
@@ -101,5 +102,26 @@ class URLScanner:
                         f"URL uses an IP address instead of a domain: {url}"
                         )
             self.check_lookalike_domain(url, engine)
+            
+            try:
+                vt = VirusTotalScanner()
+                result = vt.scan_url(url)
+                
+                if result["malicious"] > 0:
+                    engine.add(
+                40,
+                f"VirusTotal: {result['malicious']} security vendor(s) flagged this URL as malicious."
+            )
+                elif result["suspicious"] > 0:
+                    engine.add(
+                25,
+                f"VirusTotal: {result['suspicious']} security vendor(s) marked this URL as suspicious."
+            )
+            except Exception as e:
+                print(f"VirusTotal Error: {e}")
+                engine.add(
+                    0,
+            "VirusTotal lookup could not be completed."
+        )
 
-scanner=URLScanner() 
+scanner=URLScanner()

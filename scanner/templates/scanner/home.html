@@ -4,7 +4,7 @@
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta httqp-equiv="refresh" content="20">
+    <meta httqp-equiv="refresh" content="10">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -15,7 +15,7 @@
         @import url('https://fonts.googleapis.com/css?family=McLaren&display=swap');
 
         body {
-            bgcolor: #f8f9fa;
+            background: #f6bbd3b5;
             font-family: 'Playfair Display';
             font-style: bold;
             font-weight: 200;
@@ -26,6 +26,10 @@
             align-items:center;
             min-height:100vh;
             text-align:center;
+        }
+
+        form {
+            background: transparent;
         }
     </style>
 
@@ -41,8 +45,9 @@
     <button type="submit" name="scan_type" value="text">URL</button>
     <button type="submit" name="scan_type" value="text">SMS</button> {% endcomment %}
 
-    <textarea name="text" rows="10" cols="20" placeholder="Paste email or message here"></textarea>
+    <textarea name="text" rows="10" cols="30" placeholder="Paste email or message here"> </textarea>
     <br>
+    {%comment%} Remember to add auto-detect copy and paste text{% endcomment %}
     <button type="submit">Scan</button>
 </form>
 
