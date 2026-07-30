@@ -3,6 +3,7 @@ from .ml.models.predict import predict_email
 from .ml.services.threat_engine import ThreatEngine
 from .ml.services.rules import check_rules
 from scanner.ml.services.input_detector import InputDetector
+from scanner.ml.services.analyzer import analyze_text
 
 
 def home(request):

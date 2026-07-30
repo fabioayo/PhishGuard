@@ -84,6 +84,8 @@ class URLScanner:
 
     def scan(self,urls, engine):
         
+        vt= VirusTotalScanner()
+        
         for url in urls:
 
             if any(site in url for site in SHORTENERS):
@@ -91,6 +93,7 @@ class URLScanner:
                     20,
                     f"Shortened URL detected: {url}"
                 )
+            domain = urlparse(url).netloc.lower()
 
             if any(url.endswith(tld) for tld in SUSPICIOUS_DOMAINS):
                 engine.add(
@@ -104,7 +107,6 @@ class URLScanner:
             self.check_lookalike_domain(url, engine)
             
             try:
-                vt = VirusTotalScanner()
                 result = vt.scan_url(url)
                 
                 if result["malicious"] > 0:

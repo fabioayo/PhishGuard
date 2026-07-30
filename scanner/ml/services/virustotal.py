@@ -20,13 +20,17 @@ class VirusTotalScanner:
         response = requests.post(
             BASE_URL,
             headers=headers,
-            data=data
+            data=data,
+            timeout=15
             )
         
-        print ("Status:", response.status_code)
-        print ("URL:", response.url)
-        print ("Headers:", response.headers)
-        print ("Body", response.text)
+        response.raise_for_status()
+        
+        print ("VirusTotal status:", response.status_code)
+        # print ("Status:", response.status_code)
+        # print ("URL:", response.url)
+        # print ("Headers:", response.headers)
+        # print ("Body", response.text)
         
         return response.json()
     
@@ -38,8 +42,9 @@ class VirusTotalScanner:
         
         response = requests.get((
             f"https://www.virustotal.com/api/v3/analyses/{analysis_id}"),
-            headers=headers
+            headers=headers, timeout=15
         )
+        response.raise_for_status()
         return response.json()
     
     def parse_results(self, result):
