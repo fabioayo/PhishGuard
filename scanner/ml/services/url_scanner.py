@@ -60,8 +60,14 @@ class URLScanner:
         return substitutions
 
     def check_lookalike_domain(self,url, engine):
-
-        domain = urlparse(url).netloc.lower()
+        try:
+            domain=urlparse(url).netloc.lower()
+        except:
+            engine.add(20, f"Malformed or invalid URL detected: {url}"
+                       )
+            if not domain:
+                return 
+            
         normalized = self.normalize_word(domain)
 
         for brand in TRUSTED_BRANDS:
