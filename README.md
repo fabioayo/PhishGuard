@@ -1,108 +1,136 @@
-# ai-phishing-detector
+# 🛡️ PhishGuard — AI Phishing Detector
 
-# 🛡️ AI Phishing Detector
+PhishGuard is a full-stack phishing detection application built with **Python, Django, Django REST Framework, React, and Scikit-learn**.
 
-An AI-powered phishing detection system built with **Python**, **Django**, and **Scikit-learn**. The application analyzes emails and URLs using machine learning and rule-based techniques to identify phishing attempts and explain why they were flagged.
+It analyzes emails, URLs, and messages using machine learning, rule-based security checks, and VirusTotal URL analysis.
 
-## Features
+## ✨ Features
 
-* Email phishing detection
-* URL phishing detection
-* Machine Learning (Scikit-learn + TF-IDF)
-* Rule-based phishing analysis
-* Confidence score
-* Explainable detection results
-* Web interface built with Django
+- Email, URL, and message analysis
+- Machine-learning phishing detection
+- Rule-based threat detection
+- VirusTotal URL reputation checks
+- Risk level and risk score
+- Prediction confidence
+- Explainable detection reasons
+- Responsive React interface
+- Scan history using browser `localStorage`
+- Clear scan history
 
-## Tech Stack
+## 🧰 Tech Stack
 
-* Python
-* Django
-* Scikit-learn
-* Pandas
-* Joblib
-* HTML/CSS
-* Bootstrap
+**Backend**
+- Python
+- Django
+- Django REST Framework
+- Scikit-learn
+- Pandas
+- Joblib
 
-## Project Structure
+**Frontend**
+- React
+- Vite
+- JavaScript
+- CSS
 
-```text
-ai-phishing-detector/
-│── core/
-│── scanner/
-│   ├── AL/
-│   ├── templates/
-│   ├── views.py
-│   └── urls.py
-│── manage.py
-│── requirements.txt
-└── README.md
-```
+**Security**
+- VirusTotal API
+- Rule-based phishing analysis
 
-## Installation
+## 🚀 Installation
 
 Clone the repository:
 
 ```bash
 git clone https://github.com/fabioayo/ai-phishing-detector.git
-```
-
-Navigate into the project:
-
-```bash
 cd ai-phishing-detector
 ```
 
-Create a virtual environment:
+Create and activate a virtual environment:
 
 ```bash
 python -m venv venv
-```
-
-Activate it (Windows):
-
-```bash
 venv\Scripts\activate
 ```
 
-Install dependencies:
+Install backend dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the application:
+Create a `.env` file and add your VirusTotal API key:
+
+```env
+VT_API_KEY=your_api_key_here
+```
+
+Run Django:
 
 ```bash
 python manage.py migrate
 python manage.py runserver
 ```
 
-## Current Features
+Open a **second terminal**, then start React:
 
-* Machine learning email classifier
-* Machine learning URL classifier
-* Rule-based phishing detection
-* Confidence scoring
-* Web-based scanning interface
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-## Planned Improvements
+Open the Vite address shown in the terminal, usually:
 
-* React frontend
-* Django REST API
-* VirusTotal integration
-* WHOIS & SSL checks
-* Domain age analysis
-* User authentication
-* Scan history
-* Threat intelligence dashboard
+```text
+http://localhost:5173/
+```
 
-## Screenshots
+> Keep both Django and React running during development.
 
-*Screenshots will be added in future updates.*
+## 🔌 API Endpoint
 
-## Author
+```http
+POST /api/analyze/
+```
+
+Example request:
+
+```json
+{
+  "text": "Urgent! Verify your account immediately."
+}
+```
+
+## 📁 Project Structure
+
+```text
+ai-phishing-detector/
+├── core/
+├── scanner/
+│   ├── ml/
+│   ├── api.py
+│   └── serializers.py
+├── frontend/
+│   └── src/
+├── manage.py
+├── requirements.txt
+└── README.md
+```
+
+## 🔐 Security Note
+
+Do not upload your `.env` file or VirusTotal API key to GitHub. PhishGuard provides automated security assessments and should support—not replace—careful security judgment.
+
+## 🔮 Future Improvements
+
+- WHOIS and SSL checks
+- Domain-age analysis
+- User authentication
+- Database-backed scan history
+- Automated testing
+- Production deployment
+
+## 👨‍💻 Author
 
 **fabioayo77**
-
-
