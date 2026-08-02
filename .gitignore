@@ -5,6 +5,7 @@ db.sqlite3
 .vscode/
 *.csv
 *.parquet
+.env
 
 frontend/node_modules/
 frontend/dist
