@@ -12,7 +12,15 @@ class InputDetector:
         text = text.strip()
 
         # Entire input is a URL
-        if re.fullmatch(self.URL_PATTERN, text):
+        url_pattern = (
+            r"^(?:https?://)?"
+            r"(?:www\.)?"
+            r"(?:[a-zA-Z0-9-]+\.)+"
+            r"[a-zA-Z]{2,}"
+            r"(?::\d+)?"
+            r"(?:/[^\s]*)?$"
+            )
+        if re.match(url_pattern, text.strip(), re.IGNORECASE):
             return "url"
 
         # Looks like an email message

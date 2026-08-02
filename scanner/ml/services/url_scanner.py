@@ -36,12 +36,63 @@ LOOKALIKE_CHARS = {
 
 class URLScanner:
     def extract_urls(self,text):
-        pattern = r'https?://[^\s]+'
-        return re.findall(pattern, text)
+        pattern =  (
+            r'(?i)'
+            r'(?:https?://)?'
+            r'(?:www\.)?'
+            r'(?:[a-z0-9-]+\.)+'
+            r'[a-z]{2,}'
+            r'(?::\d+)?'
+            r'(?:/[^\s<>"\']*)?'
+        )
+        
+        matches=re.findall(pattern,text)
+        
+        return [
+            self.prepare_url(url)
+            for url in matches
+            if url
+        ]
+    
+    def prepare_url(self, url):
+
+        url = url.strip()
+
+        # Remove punctuation that may appear after a URL in a sentence.
+        url = url.rstrip(".,!?;:)]}>\"'")
+
+        if not url.startswith(("http://", "https://")):
+            url = "https://" + url
+
+        return url
+
+    def get_domain(self, url):
+        try:
+            url = url.strip()
+            if not url.startswith(("http://", "https://")):
+                url = "https://" + url
+                
+            parsed = urlparse(url)
+            
+            domain = parsed.hostname
+            
+            if domain:
+                return domain.lower()
+            
+            return None
+        
+        except ValueError as error:
+            print(f"URL parsing error: {url} -> {error}")
+
+        return None   
 
     def is_ip_url(self,url):
+        domain = self.get_domain(url)
+        if not domain: 
+            return False
+        
         pattern = r'https?://(?:\d{1,3}\.){3}\d{1,3}'
-        return re.match(pattern, url) is not None
+        return re.fullmatch(pattern, domain) is not None
 
     def normalize_word(self,word):
         for fake, real in LOOKALIKE_CHARS.items():
@@ -60,14 +111,16 @@ class URLScanner:
         return substitutions
 
     def check_lookalike_domain(self,url, engine):
-        try:
-            domain=urlparse(url).netloc.lower()
-        except:
-            engine.add(20, f"Malformed or invalid URL detected: {url}"
-                       )
-            if not domain:
-                return 
-            
+
+        domain = self.get_domain(url)
+
+        if not domain:
+            engine.add(
+                20,
+                f"Malformed or invalid URL detected: {url}"
+            )
+            return
+
         normalized = self.normalize_word(domain)
 
         for brand in TRUSTED_BRANDS:
@@ -77,13 +130,15 @@ class URLScanner:
                 substitutions = self.get_substitutions(domain)
 
                 message = (
-                    f"Possible lookalike domain: '{domain}' may be impersonating "
-                    f"'{brand}.com'."
+                    f"Possible lookalike domain: '{domain}' may be "
+                    f"impersonating '{brand}.com'."
                 )
 
                 if substitutions:
+
                     message += (
-                        f" Detected substitution(s): {', '.join(substitutions)}."
+                        f" Detected substitution(s): "
+                        f"{', '.join(substitutions)}."
                     )
 
                 engine.add(25, message)
@@ -93,18 +148,38 @@ class URLScanner:
         vt= VirusTotalScanner()
         
         for url in urls:
-
-            if any(site in url for site in SHORTENERS):
+            
+            url=self.prepare_url(url)
+            
+            domain=self.get_domain(url)
+            if not domain:
+                engine.add(
+                    20,
+                    f"Malformed or invalid URL detected: {url}"
+                )
+                continue
+            
+            if any(
+                domain==shortener 
+                or domain.endswith(f".{shortener}")
+                for shortener in SHORTENERS
+            ):
                 engine.add(
                     20,
                     f"Shortened URL detected: {url}"
                 )
-            domain = urlparse(url).netloc.lower()
 
-            if any(url.endswith(tld) for tld in SUSPICIOUS_DOMAINS):
+            # if any(site in url for site in SHORTENERS):
+            #     engine.add(
+            #         20,
+            #         f"Shortened URL detected: {url}"
+            #     )
+            # domain = urlparse(url).netloc.lower()
+
+            if any(domain.endswith(tld) for tld in SUSPICIOUS_DOMAINS):
                 engine.add(
                     15,
-                    f"Suspicious domain detected: {url}"
+                    f"Suspicious domain detected: {domain}"
                 )
             if self.is_ip_url(url):
                 engine.add(25,
