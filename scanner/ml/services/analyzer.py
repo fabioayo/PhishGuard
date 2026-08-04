@@ -3,6 +3,7 @@ from scanner.ml.services.threat_engine import ThreatEngine
 from scanner.ml.services.rules import check_rules
 from scanner.ml.services.input_detector import InputDetector
 
+ML_PHISHING_SCORE=60
 
 def analyze_text(text):
 
@@ -22,12 +23,11 @@ def analyze_text(text):
 
         if prediction["result"] == "Phishing":
             engine.add(
-                60,
+                ML_PHISHING_SCORE,
                 "Machine Learning model classified the email as phishing."
             )
 
     else:
-
         prediction = {
             "result": "Safe",
             "confidence": 100

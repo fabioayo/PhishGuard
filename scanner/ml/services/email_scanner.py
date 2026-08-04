@@ -1,21 +1,12 @@
 import re
 
-FREE_PROVIDERS = [
-        "gmail.com",
-        "yahoo.com",
-        "hotmail.com",
-        "outlook.com",
-        "icloud.com"
-    ]
-TRUSTED_BRANDS = [
-    "paypal",
-    "amazon",
-    "microsoft",
-    "apple",
-    "google",
-    "facebook",
-    "netflix",
-]
+FREE_PROVIDERS = ["gmail.com","yahoo.com","hotmail.com","outlook.com","icloud.com"]
+  
+TRUSTED_BRANDS = ["paypal","amazon","microsoft","apple","google","facebook",
+"netflix","linkedin","twitter","dropbox","instagram","ebay","wellsfargo"]
+
+EXTRACT_EMAIL_SCORE =20
+EMAIL_SCANNER_SCORE = 10
 
 class EmailScanner:
     def extract_emails(self,text):
@@ -38,14 +29,14 @@ class EmailScanner:
                 if any(provider in email_lower for provider in FREE_PROVIDERS):
 
                     engine.add(
-                        20,
+                        EXTRACT_EMAIL_SCORE,
                         f"Possible impersonation email: {email}"
                     )
     def scan(self, text, engine):
         emails = self.extract_emails(text)
         if emails:
             engine.add(
-                10, f"Found {len(emails)} email address(es)."
+                EMAIL_SCANNER_SCORE, f"Found {len(emails)} email address(es)."
         )
 
         self.check_email_addresses(emails, engine)

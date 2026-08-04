@@ -27,10 +27,6 @@ class VirusTotalScanner:
         response.raise_for_status()
         
         print ("VirusTotal status:", response.status_code)
-        # print ("Status:", response.status_code)
-        # print ("URL:", response.url)
-        # print ("Headers:", response.headers)
-        # print ("Body", response.text)
         
         return response.json()
     

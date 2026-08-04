@@ -4,88 +4,46 @@ from urllib.parse import urlparse
 from .url_scanner import URLScanner
 from .email_scanner import EmailScanner
 
-URGENCY_WORDS = [
-        "urgent",
-        "immediately",
-        "asap",
-        "action required",
-        "important"
-    ]
-CREDENTIAL_WORDS = [
-        "password",
-        "login",
-        "verify",
-        "confirm account",
-        "update account"
-    ]
-ACTION_WORDS = [
-        "click here",
-        "click below",
-        "open link",
-        "follow this link"
-    ]
-FREE_PROVIDERS = [
-        "gmail.com",
-        "yahoo.com",
-        "hotmail.com",
-        "outlook.com",
-        "icloud.com"
-    ]
-SHORTENERS = [
-        "bit.ly",
-        "tinyurl",
-        "goo.gl",
-        "t.co",
-        "ow.ly"
-    ]
-SUSPICIOUS_DOMAINS = [
-        ".xyz",
-        ".top",
-        ".click",
-        ".gq",
-        ".tk"
-    ]
-TRUSTED_BRANDS = [
-    "paypal",
-    "amazon",
-    "microsoft",
-    "apple",
-    "google",
-    "facebook",
-    "netflix",
-]
-LOOKALIKE_CHARS = {
-    "0": "o",
-    "1": "l",
-    "3": "e",
-    "5": "s",
-    "7": "t",
-    "@": "a"
-}
+URGENCY_SCORE=10
+CREDENTIAL_SCORE=20
+ACTION_SCORE=10
+URL_SCORE=15
 
-#URL Functions
+URGENCY_WORDS = ["urgent","immediately","asap","action required","important"]
+
+CREDENTIAL_WORDS = ["password","login","verify","confirm account","update account"]
+
+ACTION_WORDS = ["click here","click below","open link","follow this link","download attachment"]
+
+FREE_PROVIDERS = ["gmail.com","yahoo.com","hotmail.com","outlook.com","icloud.com"]
+
+SHORTENERS = ["bit.ly","tinyurl","goo.gl","t.co","ow.ly"]
+
+SUSPICIOUS_DOMAINS = [".xyz",".top",".click",".gq",".tk",".ml",".cf",".ga"]
+
+TRUSTED_BRANDS = ["paypal","amazon","microsoft","apple","google","facebook","netflix","linkedin","twitter","dropbox","instagram","ebay","wellsfargo","chase","bankofamerica"]
+
+LOOKALIKE_CHARS = {"0": "o","1": "l","3": "e","5": "s","7": "t","@": "a"}
+
 def check_rules(text, engine):
-    """
-    Apply rule-based phishing checks.
-    """
 
     text = text.lower()
 
     if any(word in text for word in URGENCY_WORDS):
         engine.add(
-            10,
+            URGENCY_SCORE,
             "Urgency language detected."
         )
 
     if any(word in text for word in CREDENTIAL_WORDS):
         engine.add(
-            20,
+            CREDENTIAL_SCORE,
             "Sensitive credential request detected."
         )
 
     if any(word in text for word in ACTION_WORDS):
         engine.add(
-            10,
+            ACTION_SCORE,
             "Suspicious call-to-action detected."
         )
         
@@ -95,7 +53,7 @@ def check_rules(text, engine):
 
     if urls:
         engine.add(
-            15,
+            URL_SCORE,
             f"Found {len(urls)} URL(s) in the email."
         )
 

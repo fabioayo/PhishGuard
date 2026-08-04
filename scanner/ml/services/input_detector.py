@@ -1,6 +1,5 @@
 import re
 
-
 class InputDetector:
 
     URL_PATTERN = r"https?://[^\s]+"

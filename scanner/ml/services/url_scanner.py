@@ -1,38 +1,22 @@
+import re
 from urllib.parse import urlparse
 from .virustotal import VirusTotalScanner
-import re
 
-SHORTENERS = [
-        "bit.ly",
-        "tinyurl",
-        "goo.gl",
-        "t.co",
-        "ow.ly"
-    ]
-SUSPICIOUS_DOMAINS = [
-        ".xyz",
-        ".top",
-        ".click",
-        ".gq",
-        ".tk"
-    ]
-TRUSTED_BRANDS = [
-    "paypal",
-    "amazon",
-    "microsoft",
-    "apple",
-    "google",
-    "facebook",
-    "netflix",
-]
-LOOKALIKE_CHARS = {
-    "0": "o",
-    "1": "l",
-    "3": "e",
-    "5": "s",
-    "7": "t",
-    "@": "a"
-}
+SUSPICIOUS_DOMAINS_SCORE= 15
+LOOKALIKE_DOMAIN_SCORE = 25
+SHORTENED_DOMAIN_SCORE= 20
+MALICIOUS_DOMAINS_SCORE= 20
+IP_ADDRESS_URL_SCORE= 25
+VT_MALICIOUS_SCORE= 40
+VT_SUSPICIOUS_SCORE= 25
+
+SHORTENERS = ["bit.ly","tinyurl","goo.gl","t.co","ow.ly"]
+
+SUSPICIOUS_DOMAINS = [".xyz",".top",".click",".gq",".tk"]
+
+TRUSTED_BRANDS = ["paypal","amazon","microsoft","apple","google","facebook","netflix","linkedin","twitter","dropbox","instagram","ebay","wellsfargo","chase","bankofamerica"]
+
+LOOKALIKE_CHARS = {"0": "o","1": "l","3": "e","5": "s","7": "t","@": "a"}
 
 class URLScanner:
     def extract_urls(self,text):
@@ -116,7 +100,7 @@ class URLScanner:
 
         if not domain:
             engine.add(
-                20,
+                MALICIOUS_DOMAINS_SCORE,
                 f"Malformed or invalid URL detected: {url}"
             )
             return
@@ -141,7 +125,7 @@ class URLScanner:
                         f"{', '.join(substitutions)}."
                     )
 
-                engine.add(25, message)
+                engine.add(LOOKALIKE_DOMAIN_SCORE, message)
 
     def scan(self,urls, engine):
         
@@ -154,7 +138,7 @@ class URLScanner:
             domain=self.get_domain(url)
             if not domain:
                 engine.add(
-                    20,
+                    MALICIOUS_DOMAINS_SCORE,
                     f"Malformed or invalid URL detected: {url}"
                 )
                 continue
@@ -165,24 +149,17 @@ class URLScanner:
                 for shortener in SHORTENERS
             ):
                 engine.add(
-                    20,
+                    SHORTENED_DOMAIN_SCORE,
                     f"Shortened URL detected: {url}"
                 )
 
-            # if any(site in url for site in SHORTENERS):
-            #     engine.add(
-            #         20,
-            #         f"Shortened URL detected: {url}"
-            #     )
-            # domain = urlparse(url).netloc.lower()
-
             if any(domain.endswith(tld) for tld in SUSPICIOUS_DOMAINS):
                 engine.add(
-                    15,
+                    SUSPICIOUS_DOMAINS_SCORE,
                     f"Suspicious domain detected: {domain}"
                 )
             if self.is_ip_url(url):
-                engine.add(25,
+                engine.add(IP_ADDRESS_URL_SCORE,
                         f"URL uses an IP address instead of a domain: {url}"
                         )
             self.check_lookalike_domain(url, engine)
@@ -192,12 +169,12 @@ class URLScanner:
                 
                 if result["malicious"] > 0:
                     engine.add(
-                40,
+                VT_MALICIOUS_SCORE,
                 f"VirusTotal: {result['malicious']} security vendor(s) flagged this URL as malicious."
             )
                 elif result["suspicious"] > 0:
                     engine.add(
-                25,
+                VT_SUSPICIOUS_SCORE,
                 f"VirusTotal: {result['suspicious']} security vendor(s) marked this URL as suspicious."
             )
             except Exception as e:
