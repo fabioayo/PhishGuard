@@ -84,55 +84,55 @@ function App() {
 
       <aside className="sidebar">
 
-        <div className="sidebar-brand">
+            <div className="sidebar-brand">
 
-          <div className="shield-icon">
-            🛡
-          </div>
+              <div className="shield-icon">
+                🛡
+              </div>
 
-          <div>
-            <h2>PhishGuard</h2>
-            <p>AI Security Scanner</p>
-          </div>
+              <div>
+                <h2>PhishGuard</h2>
+                <p>AI Security Scanner</p>
+              </div>
 
-        </div>
+            </div>
 
-        <nav className="sidebar-nav">
+                    <nav className="sidebar-nav">
 
-          <button
-            className={`nav-item ${
-              activePage === "analyze" ? "active" : ""
-            }`}
-            onClick={() => setActivePage("analyze")}
-          >
-            <span>⌕</span>
-            Analyze
-          </button>
+                            <button
+                              className={`nav-item ${
+                                activePage === "analyze" ? "active" : ""
+                              }`}
+                              onClick={() => setActivePage("analyze")}
+                            >
+                              <span>⌕</span>
+                              Analyze
+                            </button>
 
-          <button
-            className={`nav-item ${
-              activePage === "history" ? "active" : ""
-            }`}
-            onClick={() => setActivePage("history")}
-          >
-            <span>◷</span>
-            Scan History
-          </button>
+                            <button
+                              className={`nav-item ${
+                                activePage === "history" ? "active" : ""
+                              }`}
+                              onClick={() => setActivePage("history")}
+                            >
+                              <span>◷</span>
+                              Scan History
+                            </button>
 
-          <button className={`nav-item ${activePage === "about" ? "active" : ""
-            }`}
-              onClick={() => setActivePage("about")}
-            >
-              <span>ⓘ</span>
-              About
-            </button>
+                            <button className={`nav-item ${activePage === "about" ? "active" : ""
+                              }`}
+                                onClick={() => setActivePage("about")}
+                              >
+                                <span>ⓘ</span>
+                                About
+                              </button>
 
-        </nav>
+                    </nav>
 
-        <div className="sidebar-footer">
-          <span className="status-dot"></span>
-          Detection system online
-        </div>
+            <div className="sidebar-footer">
+              <span className="status-dot"></span>
+              Detection system online
+            </div>
 
       </aside>
 
@@ -140,414 +140,400 @@ function App() {
 
         <div className="content-wrapper">
 
-          {/* SCAN HISTORY PAGE */}
+                  {/* SCAN HISTORY PAGE */}
 
-          {activePage === "history" && (
-            <section className="history-page">
+                          {activePage === "history" && (
+                            <section className="history-page">
 
-              <header className="page-header">
+                                  <header className="page-header">
 
-                    <div className="history-header">
+                                        <div className="history-header">
 
-                      <div>
+                                          <div>
 
-                        <span className="eyebrow">
-                          PREVIOUS SCANS
-                        </span>
+                                            <span className="eyebrow">
+                                              PREVIOUS SCANS
+                                            </span>
 
-                        <h1>
-                          Scan History
-                        </h1>
+                                            <h1>
+                                              Scan History
+                                            </h1>
 
-                        <p>
-                          View your previously analyzed emails, URLs, and messages.
-                        </p>
+                                            <p>
+                                              View your previously analyzed emails, URLs, and messages.
+                                            </p>
 
-                      </div>
+                                          </div>
 
-                      {history.length > 0 && (
-                        <button
-                          className="clear-history-button"
-                          onClick={() => {
-                            setHistory([]);
-                            localStorage.removeItem("scanHistory");
-                          }}
-                        >
-                          Clear History
-                        </button>
-                      )}
+                                          {history.length > 0 && (
+                                            <button
+                                              className="clear-history-button"
+                                              onClick={() => {
+                                                setHistory([]);
+                                                localStorage.removeItem("scanHistory");
+                                              }}
+                                            >
+                                              Clear History
+                                            </button>
+                                          )}
 
-                    </div>
+                                        </div>
 
-</header>
+                                  </header>
 
-              {history.length === 0 ? (
+                                  {history.length === 0 ? (
 
-                <section className="scanner-card">
+                                    <section className="scanner-card">
+                                      <h2>No scans yet</h2>
+                                      <p>Your completed scans will appear here.</p>
+                                    </section>
 
-                  <h2>
-                    No scans yet
-                  </h2>
+                                  ) : (
 
-                  <p>
-                    Your completed scans will appear here.
-                  </p>
+                                    <div className="history-list">
 
-                </section>
+                                      {history.map((scan) => (
 
-              ) : (
+                                        <article className="history-card"
+                                          key={scan.id}>
 
-                <div className="history-list">
+                                          <div className="history-card-header"><div>
 
-                  {history.map((scan) => (
+                                              <span className="result-label">
+                                                {scan.inputType}
+                                              </span>
 
-                    <article
-                      className="history-card"
-                      key={scan.id}
-                    >
+                                              <h3>
+                                                {scan.result}
+                                              </h3>
 
-                      <div className="history-card-header">
+                                            </div>
 
-                        <div>
+                                            <span
+                                              className={`risk-badge risk-${scan.risk.toLowerCase()}`}
+                                            >
+                                              {scan.risk}
+                                            </span>
 
-                          <span className="result-label">
-                            {scan.inputType}
-                          </span>
+                                          </div>
 
-                          <h3>
-                            {scan.result}
-                          </h3>
+                                          <p className="history-text">
+                                            {scan.text}
+                                          </p>
 
-                        </div>
+                                          <div className="history-details">
 
-                        <span
-                          className={`risk-badge risk-${scan.risk.toLowerCase()}`}
-                        >
-                          {scan.risk}
-                        </span>
+                                            <span>
+                                              Score: {scan.score}/100
+                                            </span>
 
-                      </div>
+                                            <span>
+                                              {scan.date}
+                                            </span>
 
-                      <p className="history-text">
-                        {scan.text}
-                      </p>
+                                          </div>
 
-                      <div className="history-details">
+                                        </article>
 
-                        <span>
-                          Score: {scan.score}/100
-                        </span>
+                                      ))}
 
-                        <span>
-                          {scan.date}
-                        </span>
+                                    </div>
 
-                      </div>
+                                  )}
+                            </section>
+                          )}
 
-                    </article>
+                    {/* ANALYZE PAGE */}
 
-                  ))}
+                    {activePage === "about" && (
+                      <section className="about-page">
 
-                </div>
+                            <header className="page-header">
 
-              )}
+                              <span className="eyebrow">
+                                ABOUT PHISHGUARD
+                              </span>
 
-            </section>
-          )}
+                              <h1>
+                                Security awareness powered by AI.
+                              </h1>
 
-          {/* ANALYZE PAGE */}
+                              <p>
+                                PhishGuard analyzes suspicious emails, URLs, and messages
+                                to help users identify possible phishing threats.
+                              </p>
 
-          {activePage === "about" && (
-  <section className="about-page">
+                            </header>
 
-    <header className="page-header">
+                            <section className="about-card">
 
-      <span className="eyebrow">
-        ABOUT PHISHGUARD
-      </span>
+                                  <h2>
+                                    How PhishGuard works
+                                  </h2>
 
-      <h1>
-        Security awareness powered by AI.
-      </h1>
+                                  <p>
+                                    The application combines machine-learning predictions,
+                                    rule-based security checks, and URL reputation analysis
+                                    to evaluate potentially malicious content.
+                                  </p>
 
-      <p>
-        PhishGuard analyzes suspicious emails, URLs, and messages
-        to help users identify possible phishing threats.
-      </p>
+                                  <div className="about-features">
 
-    </header>
+                                    <article className="about-feature">
 
-    <section className="about-card">
+                                      <div className="about-icon">
+                                        🧠
+                                      </div>
 
-      <h2>
-        How PhishGuard works
-      </h2>
+                                      <h3>
+                                        Machine Learning
+                                      </h3>
 
-      <p>
-        The application combines machine-learning predictions,
-        rule-based security checks, and URL reputation analysis
-        to evaluate potentially malicious content.
-      </p>
+                                      <p>
+                                        An AI model analyzes patterns associated with
+                                        phishing and legitimate content.
+                                      </p>
 
-      <div className="about-features">
+                                    </article>
 
-        <article className="about-feature">
+                                    <article className="about-feature">
 
-          <div className="about-icon">
-            🧠
-          </div>
+                                      <div className="about-icon">
+                                        🔍
+                                      </div>
 
-          <h3>
-            Machine Learning
-          </h3>
+                                      <h3>
+                                        Threat Detection
+                                      </h3>
 
-          <p>
-            An AI model analyzes patterns associated with
-            phishing and legitimate content.
-          </p>
+                                      <p>
+                                        Security rules check for urgency, credential requests,
+                                        suspicious links, and impersonation indicators.
+                                      </p>
 
-        </article>
+                                    </article>
 
-        <article className="about-feature">
+                                    <article className="about-feature">
 
-          <div className="about-icon">
-            🔍
-          </div>
+                                      <div className="about-icon">
+                                        📊
+                                      </div>
 
-          <h3>
-            Threat Detection
-          </h3>
+                                      <h3>
+                                        Risk Assessment
+                                      </h3>
 
-          <p>
-            Security rules check for urgency, credential requests,
-            suspicious links, and impersonation indicators.
-          </p>
+                                      <p>
+                                        Scan results provide a risk level, score, confidence,
+                                        and explanations for the detection.
+                                      </p>
 
-        </article>
+                                    </article>
 
-        <article className="about-feature">
+                                  </div>
 
-          <div className="about-icon">
-            📊
-          </div>
+                            </section>
 
-          <h3>
-            Risk Assessment
-          </h3>
+                            <section className="security-notice">
 
-          <p>
-            Scan results provide a risk level, score, confidence,
-            and explanations for the detection.
-          </p>
+                              <div className="security-notice-icon">
+                                🛡
+                              </div>
 
-        </article>
+                              <div>
 
-      </div>
+                                <h3>
+                                  Important security notice
+                                </h3>
 
-    </section>
+                                <p>
+                                  PhishGuard provides automated security assessments.
+                                  Results should support—not replace—careful judgment
+                                  when handling suspicious content.
+                                </p>
 
-    <section className="security-notice">
+                              </div>
 
-      <div className="security-notice-icon">
-        🛡
-      </div>
+                            </section>
 
-      <div>
-
-        <h3>
-          Important security notice
-        </h3>
-
-        <p>
-          PhishGuard provides automated security assessments.
-          Results should support—not replace—careful judgment
-          when handling suspicious content.
-        </p>
-
-      </div>
-
-    </section>
-
-  </section>
-)}
-
-          {activePage === "analyze" && (
-            <>
-
-              <header className="page-header">
-
-                <span className="eyebrow">
-                  AI-POWERED SECURITY
-                </span>
-
-                <h1>
-                  Detect phishing before it causes damage.
-                </h1>
-
-                <p>
-                  Paste an email, URL, or SMS message.
-                  Our detection engine analyzes suspicious
-                  indicators and provides a risk assessment.
-                </p>
-
-              </header>
-
-              <section className="scanner-card">
-
-                <label htmlFor="scanner-input">
-                  Content to analyze
-                </label>
-
-                <textarea
-                  id="scanner-input"
-                  value={text}
-                  onChange={(event) =>
-                    setText(event.target.value)
-                  }
-                  placeholder="Paste a suspicious email, URL, or SMS message here..."
-                  rows="10"
-                />
-
-                <button
-                  className="analyze-button"
-                  onClick={analyzeText}
-                  disabled={loading}
-                >
-
-                  {loading ? (
-                    <>
-                      <span className="spinner"></span>
-                      Analyzing...
-                    </>
-                  ) : (
-                    <>
-                      <span>🛡</span>
-                      Analyze Content
-                    </>
-                  )}
-
-                </button>
-
-                {error && (
-                  <p className="error-message">
-                    {error}
-                  </p>
-                )}
-
-              </section>
-
-              {result && (
-
-                <section className="result-card">
-
-                  <div className="result-heading">
-
-                    <div>
-
-                      <span className="eyebrow">
-                        SCAN COMPLETE
-                      </span>
-
-                      <h2>
-                        Analysis Result
-                      </h2>
-
-                    </div>
-
-                    <span
-                      className={`risk-badge risk-${result.risk.toLowerCase()}`}
-                    >
-                      {result.risk}
-                    </span>
-
-                  </div>
-
-                  <div className="result-grid">
-
-                    <div className="result-item">
-
-                      <span className="result-label">
-                        Input Type
-                      </span>
-
-                      <strong>
-                        {result.input_type}
-                      </strong>
-
-                    </div>
-
-                    <div className="result-item">
-
-                      <span className="result-label">
-                        Detection
-                      </span>
-
-                      <strong>
-                        {result.result}
-                      </strong>
-
-                    </div>
-
-                    <div className="result-item">
-
-                      <span className="result-label">
-                        Risk Score
-                      </span>
-
-                      <strong>
-                        {result.score}/100
-                      </strong>
-
-                    </div>
-
-                    <div className="result-item">
-
-                      <span className="result-label">
-                        Confidence
-                      </span>
-
-                      <strong>
-                        {result.confidence}%
-                      </strong>
-
-                    </div>
-
-                  </div>
-
-                  <h3>
-                    Why was this result given?
-                  </h3>
-
-                  <ul className="reasons-list">
-
-                    {result.reasons.length > 0 ? (
-
-                      result.reasons.map(
-                        (reason, index) => (
-
-                          <li key={index}>
-                            {reason}
-                          </li>
-
-                        )
-                      )
-
-                    ) : (
-
-                      <li>
-                        No suspicious indicators were found.
-                      </li>
-
+                      </section>
                     )}
 
-                  </ul>
+                    {activePage === "analyze" && (
+                      <>
 
-                </section>
+                        <header className="page-header">
 
-              )}
+                          <span className="eyebrow">
+                            AI-POWERED SECURITY
+                          </span>
 
-            </>
-          )}
+                          <h1>
+                            Detect phishing before it causes damage.
+                          </h1>
+
+                          <p>
+                            Paste an email, URL, or SMS message.
+                            Our detection engine analyzes suspicious
+                            indicators and provides a risk assessment.
+                          </p>
+
+                        </header>
+
+                        <section className="scanner-card">
+
+                          <label htmlFor="scanner-input">
+                            Content to analyze
+                          </label>
+
+                          <textarea
+                            id="scanner-input"
+                            value={text}
+                            onChange={(event) =>
+                              setText(event.target.value)
+                            }
+                            placeholder="Paste a suspicious email, URL, or SMS message here..."
+                            rows="10"
+                          />
+
+                          <button
+                            className="analyze-button"
+                            onClick={analyzeText}
+                            disabled={loading}
+                          >
+
+                            {loading ? (
+                              <>
+                                <span className="spinner"></span>
+                                Analyzing...
+                              </>
+                            ) : (
+                              <>
+                                <span>🛡</span>
+                                Analyze Content
+                              </>
+                            )}
+
+                          </button>
+
+                          {error && (
+                            <p className="error-message">
+                              {error}
+                            </p>
+                          )}
+
+                        </section>
+
+                        {result && (
+                          <section className="result-card">
+
+                            <div className="result-heading">
+
+                              <div>
+
+                                <span className="eyebrow">
+                                  SCAN COMPLETE
+                                </span>
+
+                                <h2>
+                                  Analysis Result
+                                </h2>
+
+                              </div>
+
+                              <span
+                                className={`risk-badge risk-${result.risk.toLowerCase()}`}
+                              >
+                                {result.risk}
+                              </span>
+
+                            </div>
+
+                            <div className="result-grid">
+
+                              <div className="result-item">
+
+                                <span className="result-label">
+                                  Input Type
+                                </span>
+
+                                <strong>
+                                  {result.input_type}
+                                </strong>
+
+                              </div>
+
+                              <div className="result-item">
+
+                                <span className="result-label">
+                                  Detection
+                                </span>
+
+                                <strong>
+                                  {result.result}
+                                </strong>
+
+                              </div>
+
+                              <div className="result-item">
+
+                                <span className="result-label">
+                                  Risk Score
+                                </span>
+
+                                <strong>
+                                  {result.score}/100
+                                </strong>
+
+                              </div>
+
+                              <div className="result-item">
+
+                                <span className="result-label">
+                                  Confidence
+                                </span>
+
+                                <strong>
+                                  {result.confidence}%
+                                </strong>
+
+                              </div>
+
+                            </div>
+
+                            <h3>
+                              Why was this result given?
+                            </h3>
+
+                            <ul className="reasons-list">
+
+                              {result.reasons.length > 0 ? (
+
+                                result.reasons.map(
+                                  (reason, index) => (
+
+                                    <li key={index}>
+                                      {reason}
+                                    </li>
+
+                                  )
+                                )
+
+                              ) : (
+
+                                <li>
+                                  No suspicious indicators were found.
+                                </li>
+
+                              )}
+
+                            </ul>
+
+                          </section>
+                        )}
+
+                      </>
+                    )}
 
         </div>
 
