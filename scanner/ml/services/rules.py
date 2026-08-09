@@ -23,7 +23,7 @@ SUSPICIOUS_DOMAINS = [".xyz",".top",".click",".gq",".tk",".ml",".cf",".ga"]
 
 TRUSTED_BRANDS = ["paypal","amazon","microsoft","apple","google","facebook","netflix","linkedin","twitter","dropbox","instagram","ebay","wellsfargo","chase","bankofamerica"]
 
-LOOKALIKE_CHARS = {"0": "o","1": "l","3": "e","5": "s","7": "t","@": "a"}
+LOOKALIKE_CHARS = {"0": "o","1": "l","3": "e","5": "s","7": "t","@": "a", "6":"b"}
 
 def check_rules(text, engine):
 
